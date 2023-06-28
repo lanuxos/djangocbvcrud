@@ -34,6 +34,16 @@ class Posts(ListView):
 	# specify the model for list view
 	model = Post
 
+# retrieve / list view reverse ordering
+class AllPosts(ListView):
+
+	# specify the model for list view
+	model = Post
+	def get_queryset(self, *args, **kwargs):
+		qs = super(AllPosts, self).get_queryset(*args, **kwargs)
+		qs = qs.order_by("-id")
+		return qs
+
 
 # detail view
 from django.views.generic.detail import DetailView
@@ -62,7 +72,6 @@ class UpdatePost(UpdateView):
 	# updating details
 	success_url ="../all-posts/"
 
-
 # delete view
 # import generic UpdateView
 from django.views.generic.edit import DeleteView
@@ -82,7 +91,7 @@ class DeletePost(DeleteView):
 from django.views.generic.edit import FormView
 
 # Relative import of GeeksForm
-from .forms import PostForm
+from .forms import InputForm, PostForm
 
 class PostFormView(FormView):
 	# specify the Form you want to use
@@ -95,3 +104,10 @@ class PostFormView(FormView):
 	# url to redirect after successfully
 	# updating details
 	success_url ="../all-posts/"
+
+
+class InputFormView(FormView):
+	form_class = InputForm
+	template_name = 'app/input_form.html'
+
+	success_url = '../all-posts'
