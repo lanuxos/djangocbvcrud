@@ -13,6 +13,7 @@ from django.views.generic.edit import CreateView
 from .models import *
 
 class CreatePost(CreateView):
+	
 
 	# specify the model for create view
 	model = Post
