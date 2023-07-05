@@ -1,0 +1,51 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+
+{% block content %}
+    <ol>
+        <!-- Iterate over object_list -->
+        {% for object in object_list %}
+        <!-- Display Objects -->
+        <li>{{ object.category }}</li>
+        <ul>
+            <li>
+                <button id="{{object.pk}}" class="btn btn-sm btn-danger delBtn"><span class="bi bi-trash"></span></button>
+                {{ object.title }}
+                [{{object.amount}}]:
+                {{object.total}}
+                [ID: {{object.pk}}]
+            </li>
+        </ul>
+
+        <hr />
+        <!-- If object_list is empty -->
+        {% empty %}
+        <li>No objects yet.</li>
+        {% endfor %}
+    </ol>
+
+    <a href="{% url 'expense' %}">Go to add more...</a>
+
+    <p id="responseMsg"></p>
+
+{% endblock content %}
+    
+{% block js %}
+<script>
+    $('.delBtn').click(function () {
+        var id = $(this).attr('id');
+        $.ajax({
+            type:"GET",
+            url: "/app/delete-expense/",
+            data: {
+                id: id
+            },
+            success: function(data){
+                $('#responseMsg').text(data);
+                <!-- window.location.href = "/app/all-expense/"; -->
+            }
+        })
+    });
+</script>
+{% endblock js %}

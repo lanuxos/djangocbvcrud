@@ -12,6 +12,9 @@ class Test(View):
 from django.views.generic.edit import CreateView
 from .models import *
 
+
+
+
 class CreatePost(CreateView):
 	
 
@@ -112,3 +115,24 @@ class InputFormView(FormView):
 	template_name = 'app/input_form.html'
 
 	success_url = '../all-posts'
+
+
+class ExpenseRecord(CreateView):
+	model = Expense
+	fields = ['category', 'title', 'amount', 'total']
+	success_url = '../all-expense/'
+
+
+class ExpenseList(ListView):
+	model = Expense
+
+
+def DeleteExpense(request):
+	if request.method == 'GET':
+		reqId = request.GET['id']
+		obj = Expense.objects.get(id=reqId)
+		id = obj.pk
+		obj.delete()
+		return HttpResponse(f"record # {id} delete successfully")
+	else:
+		return HttpResponse("Request method incorrect")

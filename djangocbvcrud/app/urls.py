@@ -11,4 +11,7 @@ urlpatterns = [
     path('delete-post/<int:pk>', DeletePost.as_view()),
     path('form/', PostFormView.as_view()),
     path('input-form/', InputFormView.as_view()),
+    path('expense/', ExpenseRecord.as_view(), name='expense'),
+    path('all-expense/', ExpenseList.as_view(), name='all-expense'),
+    path('delete-expense/', DeleteExpense, name='delete-expense'),
 ]

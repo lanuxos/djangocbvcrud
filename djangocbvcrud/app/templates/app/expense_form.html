@@ -1,0 +1,18 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <form method="POST" enctype="multipart/form-data">
+
+        <!-- Security token -->
+        {% csrf_token %}
+
+        <!-- Using the formset .as_p .as_table .as_div .as_ul -->
+        {{ form | crispy }}
+
+        <input type="submit" value="Submit">
+        <a href="{% url 'all-expense' %}">View all expense >>></a>
+    </form>
+{% endblock content %}
+    

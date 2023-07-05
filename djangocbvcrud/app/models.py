@@ -42,4 +42,4 @@ class Expense(models.Model):
         super(Expense, self).save(*arg, **kwargs)
 
     def __str__(self):
-        return f'{self.pk}/{self.title}/{self.total}'
+        return f'{self.pk}/ {self.title}/ {self.total:,}'

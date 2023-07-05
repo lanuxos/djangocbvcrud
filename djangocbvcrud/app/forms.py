@@ -1,5 +1,5 @@
 from django import forms
-from .models import Post
+from .models import *
  
  
 # creating a form
@@ -16,6 +16,11 @@ class PostForm(forms.ModelForm):
             "detail",
         ]
 
+
+class ExpenseForm(forms.ModelForm):
+    class Meta:
+        model = Expense
+        fields = '__all__'
 	
 # creating a form
 class InputForm(forms.Form):
