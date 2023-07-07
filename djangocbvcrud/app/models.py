@@ -1,3 +1,4 @@
+from ast import mod
 from unicodedata import category
 from django.db import models
 
@@ -43,3 +44,44 @@ class Expense(models.Model):
 
     def __str__(self):
         return f'{self.pk}/ {self.title}/ {self.total:,}'
+    
+
+class Product(models.Model):
+    name = models.CharField(max_length=255)
+    piePerPackage = models.IntegerField()
+    weight = models.FloatField()
+    pacLong = models.FloatField()
+    pacWidth = models.FloatField()
+    pacHeight = models.FloatField()
+
+    def __str__(self):
+        return f'{self.name}'
+    
+
+class Volume(models.Model):
+    volume = models.FloatField(null=True, blank=True)
+    weight = models.FloatField()
+
+    def __str__(self):
+        return self.pk
+    
+
+class Employee(models.Model):
+    employee = models.CharField(max_length=255)
+    available = models.BooleanField(default=True)
+    supervisor = models.BooleanField(default=False)
+
+    def save(self, *arg, **kwargs):
+        if self.supervisor:
+            self.available = False
+        super(Employee, self).save(*arg, **kwargs)
+
+    def __str__(self):
+        return f'{self.employee}'
+
+class Schedule(models.Model):
+    date = models.DateField()
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.date

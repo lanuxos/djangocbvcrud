@@ -136,3 +136,64 @@ def DeleteExpense(request):
 		return HttpResponse(f"record # {id} delete successfully")
 	else:
 		return HttpResponse("Request method incorrect")
+	
+
+def VolumeCalc(request):
+	result = {}
+	products = Product.objects.all()
+	if request.method == 'POST':
+		data = request.POST.copy()
+		vol = 0 
+		wei = 0
+		for product in products:
+			if data.get(f'{product.pk}'):
+				vol += float(data.get(f'{product.pk}')) * product.pacHeight * product.pacLong * product.pacWidth / product.piePerPackage
+				wei += float(data.get(f'{product.pk}')) / 5000
+		print(vol, wei)
+		result = {'vol': vol, 'wei': wei}
+	volumes = Volume.objects.all()
+	context = {'volumes': volumes, 'products': products, 'result': result}
+	return render(request, 'app/volume.html', context)
+
+
+from calendar import Calendar
+from datetime import datetime
+def ScheduleGenerator(range, list, supervisor): 
+	# range={'year':xxxx, 'month':xx}
+	# list is a list of employee
+	schedules = {}
+	cal = Calendar()
+	listInit = 0
+	# for c in cal.itermonthdays(range['year'], range['month']):
+	for c in cal.itermonthdates(range['year'], range['month']):
+		if c.month != range['month']-1 and c.month != range['month']+1:
+			schedules[c] = {list[listInit % len(list)]: supervisor[listInit % len(supervisor)]}
+			listInit += 1
+	return schedules
+def Schedule(request):
+	employees = Employee.objects.all()
+	avaEmployees = Employee.objects.filter(available=True)
+	supervisors = Employee.objects.filter(supervisor=True)
+	today = datetime.now()
+	range = {'year': today.year, 'month': today.month}
+	if request.method == 'POST':
+		data = request.POST.copy()
+		# get year and month from user
+		if data.get('year') and data.get('month'):
+			range['year'] = int(data.get('year'))
+			range['month'] = int(data.get('month'))
+		# change employee's available status
+		for emp in employees:
+			if data.get(f'{emp.pk}'):
+				emp.available = True
+				emp.save()
+			else:
+				emp.available = False
+				emp.save()
+	# generate schedule with ScheduleGenerator method
+	schedules = ScheduleGenerator(range, avaEmployees, supervisors)
+	print(schedules)
+	context = {'employees': employees, 'schedules': schedules}
+	return render(request, 'app/schedule.html', context)
+
+

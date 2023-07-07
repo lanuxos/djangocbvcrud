@@ -1,0 +1,88 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<form action="" method="post">
+    {% csrf_token %}
+    <div class="row mt-3">
+        {% for employee in employees %}
+            <div class="col-md-6">
+                <div class="input-group mb-3">
+                    <div class="input-group-text">
+                        <input class="form-check-input mt-0" type="checkbox" name="{{employee.pk}}" aria-label="available employee"
+                            {% if employee.available %} checked {% endif %}>
+                    </div>
+                    <input type="text" class="form-control" aria-label="employee name"
+                        value="{{employee.employee}}" disabled>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="row mt-3">
+        <div class="col">
+            <div class="input-group mb-3">
+                <span class="input-group-text">Year</span>
+                <input type="text" class="form-control" placeholder="Year(xxxx)" aria-label="Year(xxxx)" maxlength="4" name="year">
+                <span class="input-group-text">Month</span>
+                <input type="text" class="form-control" placeholder="Month(xx)" aria-label="Month(xx)" maxlength="2" name="month">
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-secondary" type="submit">Generate</button>
+</form>
+<div class="row mt-3">
+    <div class="col">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Supervisor</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                {% for key, value in schedules.items %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>
+                            <div class="row">
+                                <div class="col-6">
+                                    {% if key.weekday == 0 %}
+                                    ວັນຈັນ
+                                    {% elif key.weekday == 1 %}
+                                    ວັນອັງຄານ
+                                    {% elif key.weekday == 2 %}
+                                    ວັນພຸດ
+                                    {% elif key.weekday == 3 %}
+                                    ວັນພະຫັດ
+                                    {% elif key.weekday == 4 %}
+                                    ວັນສຸກ
+                                    {% elif key.weekday == 5 %}
+                                    ວັນເສົາ
+                                    {% elif key.weekday == 6 %}
+                                    ວັນອາທິດ
+                                    {% endif %}
+                                </div>
+                                <div class="col-6">
+                                    {{ key.day }}/{{ key.month }}{{key.year}}
+                                </div>
+                            </div>
+                        </td>
+                        
+                        {% for k, v in value.items %}
+                            <td>{{ k }}</td>
+                            <td>{{ v }}</td>
+                        {% endfor %}
+                            
+                    </tr>
+                {% endfor %}
+                    
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock content %}

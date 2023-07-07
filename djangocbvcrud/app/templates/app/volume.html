@@ -1,0 +1,28 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<form action="" method="post">
+    {% csrf_token %}
+    <div class="row mt-3">
+
+        {% for product in products %}
+        <div class="col-md-6">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="{{product.name}}" aria-label="{{product.name}}"
+                    disabled>
+                <span class="input-group-text">#</span>
+                <input type="text" class="form-control text-end" placeholder="amount" aria-label="amount" name="{{product.id}}">
+            </div>
+        </div>
+        {% endfor %}
+        <div class="col-6">
+            <button type="submit" class="btn btn-success form-control">GO</button>
+        </div>
+
+    </div>
+</form>
+
+<p>{{ result.vol }} m<sup>3</sup>| {{ result.wei }} Ton</p>
+{% endblock content %}

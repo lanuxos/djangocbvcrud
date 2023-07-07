@@ -14,4 +14,6 @@ urlpatterns = [
     path('expense/', ExpenseRecord.as_view(), name='expense'),
     path('all-expense/', ExpenseList.as_view(), name='all-expense'),
     path('delete-expense/', DeleteExpense, name='delete-expense'),
+    path('volume/', VolumeCalc, name='volume-calc'),
+    path('schedule/', Schedule, name='schedule'),
 ]
